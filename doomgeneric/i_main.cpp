@@ -18,10 +18,14 @@
 
 //#include "config.h"
 
+#include <LibGUI/GApplication.h>
+
 #include <stdio.h>
 
+extern "C" {
 //#include "doomtype.h"
 //#include "i_system.h"
+
 #include "m_argv.h"
 
 //
@@ -35,10 +39,11 @@ void D_DoomMain (void);
 void M_FindResponseFile(void);
 
 void dg_Create();
-
+}
 
 int main(int argc, char **argv)
 {
+    GApplication app(argc, argv);
     // save arguments
 
     myargc = argc;
