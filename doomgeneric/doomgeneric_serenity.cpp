@@ -56,6 +56,9 @@ static unsigned char convertToDoomKey(const GKeyEvent& event)
     case Key_RightShift:
 		key = KEY_RSHIFT;
 		break;
+    case Key_Alt:
+        key = KEY_RALT;
+        break;
 	default:
         if (!event.text().is_empty())
 		    key = tolower(event.text()[0]);
