@@ -52,5 +52,8 @@ print:
 	@echo OBJS: $(OBJS)
 
 install:
+	mkdir -p $(DESTDIR)/bin
 	cp $(OUTPUT) $(DESTDIR)/bin
+	mkdir -p $(DESTDIR)/res/icons/16x16
+	cp doom.png $(DESTDIR)/res/icons/16x16/
 

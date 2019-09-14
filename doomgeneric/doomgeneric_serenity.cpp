@@ -8,6 +8,7 @@
 #include <sys/time.h>
 
 #include <LibDraw/GraphicsBitmap.h>
+#include <LibDraw/PNGLoader.h>
 #include <LibGUI/GWindow.h>
 #include <LibGUI/GWidget.h>
 #include <LibGUI/GEvent.h>
@@ -27,57 +28,57 @@ static unsigned int s_KeyQueueReadIndex = 0;
 static unsigned char convertToDoomKey(const GKeyEvent& event)
 {
     unsigned char key = 0;
-	switch (event.key()) {
+    switch (event.key()) {
     case Key_Return:
-		key = KEY_ENTER;
-		break;
+        key = KEY_ENTER;
+        break;
     case Key_Escape:
-		key = KEY_ESCAPE;
-		break;
+        key = KEY_ESCAPE;
+        break;
     case Key_Left:
-		key = KEY_LEFTARROW;
-		break;
+        key = KEY_LEFTARROW;
+        break;
     case Key_Right:
-		key = KEY_RIGHTARROW;
-		break;
+        key = KEY_RIGHTARROW;
+        break;
     case Key_Up:
-		key = KEY_UPARROW;
-		break;
+        key = KEY_UPARROW;
+        break;
     case Key_Down:
-		key = KEY_DOWNARROW;
-		break;
+        key = KEY_DOWNARROW;
+        break;
     case Key_Control:
-		key = KEY_FIRE;
-		break;
+        key = KEY_FIRE;
+        break;
     case Key_Space:
-		key = KEY_USE;
-		break;
+        key = KEY_USE;
+        break;
     case Key_LeftShift:
     case Key_RightShift:
-		key = KEY_RSHIFT;
-		break;
+        key = KEY_RSHIFT;
+        break;
     case Key_Alt:
         key = KEY_RALT;
         break;
-	default:
+    default:
         if (!event.text().is_empty())
-		    key = tolower(event.text()[0]);
-		break;
-	}
+            key = tolower(event.text()[0]);
+        break;
+    }
 
-	return key;
+    return key;
 }
 
 static void addKeyToQueue(const GKeyEvent& event)
 {
     bool pressed = event.type() == GEvent::KeyDown;
-	unsigned char key = convertToDoomKey(event);
+    unsigned char key = convertToDoomKey(event);
 
-	unsigned short keyData = (pressed << 8) | key;
+    unsigned short keyData = (pressed << 8) | key;
 
-	s_KeyQueue[s_KeyQueueWriteIndex] = keyData;
-	s_KeyQueueWriteIndex++;
-	s_KeyQueueWriteIndex %= KEYQUEUE_SIZE;
+    s_KeyQueue[s_KeyQueueWriteIndex] = keyData;
+    s_KeyQueueWriteIndex++;
+    s_KeyQueueWriteIndex %= KEYQUEUE_SIZE;
 }
 
 class DoomWidget final : public GWidget {
@@ -117,7 +118,7 @@ static DoomWidget* g_doom_widget;
 
 extern "C" void DG_Init()
 {
-	memset(s_KeyQueue, 0, KEYQUEUE_SIZE * sizeof(unsigned short));
+    memset(s_KeyQueue, 0, KEYQUEUE_SIZE * sizeof(unsigned short));
 
     // window creation
 
@@ -126,6 +127,7 @@ extern "C" void DG_Init()
     g_window = new GWindow;
     g_window->set_double_buffering_enabled(false);
     g_window->set_rect(100, 100, DOOMGENERIC_RESX * 2, DOOMGENERIC_RESY * 2);
+    g_window->set_icon(load_png("/res/icons/16x16/doom.png"));
 
     g_doom_widget = new DoomWidget;
     g_window->set_main_widget(g_doom_widget);
@@ -160,23 +162,23 @@ extern "C" uint32_t DG_GetTicksMs()
 
 extern "C" int DG_GetKey(int* pressed, unsigned char* doomKey)
 {
-	if (s_KeyQueueReadIndex == s_KeyQueueWriteIndex)
-	{
-		//key queue is empty
+    if (s_KeyQueueReadIndex == s_KeyQueueWriteIndex)
+    {
+        //key queue is empty
 
-		return 0;
-	}
-	else
-	{
-		unsigned short keyData = s_KeyQueue[s_KeyQueueReadIndex];
-		s_KeyQueueReadIndex++;
-		s_KeyQueueReadIndex %= KEYQUEUE_SIZE;
+        return 0;
+    }
+    else
+    {
+        unsigned short keyData = s_KeyQueue[s_KeyQueueReadIndex];
+        s_KeyQueueReadIndex++;
+        s_KeyQueueReadIndex %= KEYQUEUE_SIZE;
 
-		*pressed = keyData >> 8;
-		*doomKey = keyData & 0xFF;
+        *pressed = keyData >> 8;
+        *doomKey = keyData & 0xFF;
 
-		return 1;
-	}
+        return 1;
+    }
 }
 
 extern "C" void DG_SetWindowTitle(const char * title)
