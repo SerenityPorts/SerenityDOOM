@@ -1,3 +1,11 @@
 doom
 doom.map
 build
+
+*.cflags
+*.config
+*.creator
+*.cxxflags
+*.files
+*.includes
+
