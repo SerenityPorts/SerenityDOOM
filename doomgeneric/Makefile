@@ -5,13 +5,6 @@
 # $Log:$
 #
 
-ifeq ($(V),1)
-	VB=''
-else
-	VB=@
-endif
-
-
 CC=i686-pc-serenity-gcc
 CXX=i686-pc-serenity-g++
 CFLAGS+=-ggdb3 -Os
@@ -49,11 +42,11 @@ $(OBJDIR):
 
 $(OBJDIR)/%.o:	%.c
 	@echo [Compiling $<]
-	$(VB)$(CC) $(CFLAGS) -c $< -o $@
+	$(PRE_CXX) $(VB)$(CC) $(CFLAGS) -c $< -o $@
 
 $(OBJDIR)/%.o:	%.cpp
 	@echo [Compiling $<]
-	$(VB)$(CXX) $(CXXFLAGS) -c $< -o $@
+	$(PRE_CXX) $(VB)$(CXX) $(CXXFLAGS) -c $< -o $@
 
 print:
 	@echo OBJS: $(OBJS)
