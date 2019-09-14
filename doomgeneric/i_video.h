@@ -89,6 +89,13 @@ typedef struct
     boolean poor_quality;
 } screen_mode_t;
 
+struct color {
+    uint32_t b:8;
+    uint32_t g:8;
+    uint32_t r:8;
+    uint32_t a:8;
+};
+
 typedef boolean (*grabmouse_callback_t)(void);
 
 // Called by D_DoomMain,

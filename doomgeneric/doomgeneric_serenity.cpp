@@ -118,7 +118,7 @@ extern "C" void DG_Init()
 
     // window creation
 
-    g_bitmap = GraphicsBitmap::create_wrapper(GraphicsBitmap::Format::RGB32, Size(DOOMGENERIC_RESX, DOOMGENERIC_RESY), DOOMGENERIC_RESX * 4, DG_ScreenBuffer);
+    g_bitmap = GraphicsBitmap::create_wrapper(GraphicsBitmap::Format::Indexed8, Size(DOOMGENERIC_RESX, DOOMGENERIC_RESY), DOOMGENERIC_RESX, DG_ScreenBuffer);
 
     g_window = new GWindow;
     g_window->set_double_buffering_enabled(false);
@@ -180,4 +180,12 @@ extern "C" void DG_SetWindowTitle(const char * title)
 {
     if (g_window)
         g_window->set_title(title);
+}
+
+extern "C" void DG_SetPalette(const struct color* colors)
+{
+    for (int i = 0; i < 256; ++i) {
+        auto& c = colors[i];
+        g_bitmap->set_palette_color(i, Color(c.r, c.g, c.b));
+    }
 }
