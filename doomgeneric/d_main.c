@@ -324,7 +324,9 @@ void D_Display (void)
 			       , 0, 0, SCREENWIDTH, SCREENHEIGHT, tics);
 	I_UpdateNoBlit ();
 	M_Drawer ();                            // menu is drawn even on top of wipes
+    DG_PumpEventLoop();
 	I_FinishUpdate ();                      // page flip or blit buffer
+    DG_PumpEventLoop();
     } while (!done);
 }
 
@@ -441,10 +443,14 @@ void D_DoomLoop (void)
 
     while (1)
     {
+        DG_PumpEventLoop();
+
 		// frame syncronous IO operations
 		I_StartFrame ();
 
 		TryRunTics (); // will run at least one tic
+
+        DG_PumpEventLoop();
 
 		S_UpdateSounds (players[consoleplayer].mo);// move positional sounds
 

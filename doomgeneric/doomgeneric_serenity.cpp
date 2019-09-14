@@ -127,15 +127,15 @@ extern "C" void DG_Init()
     g_doom_widget = new DoomWidget;
     g_window->set_main_widget(g_doom_widget);
 
-    new CTimer(33, [] {
-        g_doom_widget->update();
-    });
-
     g_window->show();
 }
 
-
 extern "C" void DG_DrawFrame()
+{
+    g_doom_widget->update();
+}
+
+extern "C" void DG_PumpEventLoop()
 {
     CEventLoop::current().pump(CEventLoop::WaitMode::PollForEvents);
 }
