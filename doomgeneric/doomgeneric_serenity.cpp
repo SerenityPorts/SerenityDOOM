@@ -194,3 +194,8 @@ extern "C" void DG_SetPalette(const struct color* colors)
         g_bitmap->set_palette_color(i, Color(c.r, c.g, c.b));
     }
 }
+
+extern "C" void DG_SetFullscreen(bool fullscreen)
+{
+    g_window->set_fullscreen(fullscreen);
+}
