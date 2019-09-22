@@ -16,7 +16,7 @@
 #include <LibCore/CEventLoop.h>
 #include <LibCore/CTimer.h>
 
-static GWindow* g_window;
+static RefPtr<GWindow> g_window;
 static RefPtr<GraphicsBitmap> g_bitmap;
 
 #define KEYQUEUE_SIZE 16
@@ -114,7 +114,7 @@ void DoomWidget::paint_event(GPaintEvent& event)
     painter.draw_scaled_bitmap(rect(), *g_bitmap, g_bitmap->rect());
 }
 
-static DoomWidget* g_doom_widget;
+static RefPtr<DoomWidget> g_doom_widget;
 
 extern "C" void DG_Init()
 {
@@ -124,12 +124,12 @@ extern "C" void DG_Init()
 
     g_bitmap = GraphicsBitmap::create_wrapper(GraphicsBitmap::Format::Indexed8, Size(DOOMGENERIC_RESX, DOOMGENERIC_RESY), DOOMGENERIC_RESX, DG_ScreenBuffer);
 
-    g_window = new GWindow;
+    g_window = GWindow::construct();
     g_window->set_double_buffering_enabled(false);
     g_window->set_rect(100, 100, DOOMGENERIC_RESX * 2, DOOMGENERIC_RESY * 2);
     g_window->set_icon(load_png("/res/icons/16x16/doom.png"));
 
-    g_doom_widget = new DoomWidget;
+    g_doom_widget = DoomWidget::construct();
     g_window->set_main_widget(g_doom_widget);
 
     g_window->show();
