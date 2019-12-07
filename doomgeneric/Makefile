@@ -11,7 +11,7 @@ CFLAGS+=-ggdb3 -Os
 CXXFLAGS=$(CFLAGS) -std=c++17 -fno-rtti -fno-exceptions
 LDFLAGS+=-Wl,--gc-sections
 CFLAGS+=-ggdb3 -Wall -DNORMALUNIX -DLINUX -DSNDSERV # -DUSEASM
-LIBS+=-lm -lc -lgui -lcore -ldraw
+LIBS+=-lm -lc -lgui -lipc -ldraw -lcore
 
 # subdirectory for objects
 OBJDIR=build
