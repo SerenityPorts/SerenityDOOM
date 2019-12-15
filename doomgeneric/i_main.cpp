@@ -51,13 +51,13 @@ int main(int argc, char** argv)
 
     auto menubar = make<GMenuBar>();
 
-    auto doom_menu = make<GMenu>("DOOM");
+    auto doom_menu = GMenu::construct("DOOM");
     doom_menu->add_action(GCommonActions::make_quit_action([](auto&) {
         exit(0);
     }));
     menubar->add_menu(move(doom_menu));
 
-    auto view_menu = make<GMenu>("View");
+    auto view_menu = GMenu::construct("View");
     auto fullscreen_action = GCommonActions::make_fullscreen_action([&](auto& action) {
         action.set_checked(!action.is_checked());
         DG_SetFullscreen(action.is_checked());
