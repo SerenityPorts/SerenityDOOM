@@ -18,10 +18,10 @@
 
 //#include "config.h"
 
-#include <LibGUI/GAction.h>
-#include <LibGUI/GApplication.h>
-#include <LibGUI/GMenu.h>
-#include <LibGUI/GMenuBar.h>
+#include <LibGUI/Action.h>
+#include <LibGUI/Application.h>
+#include <LibGUI/Menu.h>
+#include <LibGUI/MenuBar.h>
 
 #include <stdio.h>
 
@@ -47,18 +47,18 @@ void DG_SetFullscreen(bool);
 
 int main(int argc, char** argv)
 {
-    GApplication app(argc, argv);
+    GUI::Application app(argc, argv);
 
-    auto menubar = make<GMenuBar>();
+    auto menubar = make<GUI::MenuBar>();
 
-    auto doom_menu = GMenu::construct("DOOM");
-    doom_menu->add_action(GCommonActions::make_quit_action([](auto&) {
+    auto doom_menu = GUI::Menu::construct("DOOM");
+    doom_menu->add_action(GUI::CommonActions::make_quit_action([](auto&) {
         exit(0);
     }));
     menubar->add_menu(move(doom_menu));
 
-    auto view_menu = GMenu::construct("View");
-    auto fullscreen_action = GCommonActions::make_fullscreen_action([&](auto& action) {
+    auto view_menu = GUI::Menu::construct("View");
+    auto fullscreen_action = GUI::CommonActions::make_fullscreen_action([&](auto& action) {
         action.set_checked(!action.is_checked());
         DG_SetFullscreen(action.is_checked());
     });

@@ -7,17 +7,16 @@
 #include <ctype.h>
 #include <sys/time.h>
 
-#include <LibDraw/GraphicsBitmap.h>
-#include <LibDraw/PNGLoader.h>
-#include <LibGUI/GWindow.h>
-#include <LibGUI/GWidget.h>
-#include <LibGUI/GEvent.h>
-#include <LibGUI/GPainter.h>
-#include <LibCore/CEventLoop.h>
-#include <LibCore/CTimer.h>
+#include <LibGfx/Bitmap.h>
+#include <LibGUI/Window.h>
+#include <LibGUI/Widget.h>
+#include <LibGUI/Event.h>
+#include <LibGUI/Painter.h>
+#include <LibCore/EventLoop.h>
+#include <LibCore/Timer.h>
 
-static RefPtr<GWindow> g_window;
-static RefPtr<GraphicsBitmap> g_bitmap;
+static RefPtr<GUI::Window> g_window;
+static RefPtr<Gfx::Bitmap> g_bitmap;
 
 #define KEYQUEUE_SIZE 16
 
@@ -25,7 +24,7 @@ static unsigned short s_KeyQueue[KEYQUEUE_SIZE];
 static unsigned int s_KeyQueueWriteIndex = 0;
 static unsigned int s_KeyQueueReadIndex = 0;
 
-static unsigned char convertToDoomKey(const GKeyEvent& event)
+static unsigned char convertToDoomKey(const GUI::KeyEvent& event)
 {
     unsigned char key = 0;
     switch (event.key()) {
@@ -69,9 +68,9 @@ static unsigned char convertToDoomKey(const GKeyEvent& event)
     return key;
 }
 
-static void addKeyToQueue(const GKeyEvent& event)
+static void addKeyToQueue(const GUI::KeyEvent& event)
 {
-    bool pressed = event.type() == GEvent::KeyDown;
+    bool pressed = event.type() == GUI::Event::KeyDown;
     unsigned char key = convertToDoomKey(event);
 
     unsigned short keyData = (pressed << 8) | key;
@@ -81,34 +80,34 @@ static void addKeyToQueue(const GKeyEvent& event)
     s_KeyQueueWriteIndex %= KEYQUEUE_SIZE;
 }
 
-class DoomWidget final : public GWidget {
+class DoomWidget final : public GUI::Widget {
     C_OBJECT(DoomWidget)
 public:
-    DoomWidget(GWidget* parent = nullptr)
-        : GWidget(parent)
+    DoomWidget(GUI::Widget* parent = nullptr)
+        : GUI::Widget(parent)
     {
     }
 
-    virtual void keydown_event(GKeyEvent&) override;
-    virtual void keyup_event(GKeyEvent&) override;
-    virtual void paint_event(GPaintEvent&) override;
+    virtual void keydown_event(GUI::KeyEvent&) override;
+    virtual void keyup_event(GUI::KeyEvent&) override;
+    virtual void paint_event(GUI::PaintEvent&) override;
 };
 
-void DoomWidget::keydown_event(GKeyEvent& event)
+void DoomWidget::keydown_event(GUI::KeyEvent& event)
 {
     addKeyToQueue(event);
-    GWidget::keydown_event(event);
+    GUI::Widget::keydown_event(event);
 }
 
-void DoomWidget::keyup_event(GKeyEvent& event)
+void DoomWidget::keyup_event(GUI::KeyEvent& event)
 {
     addKeyToQueue(event);
-    GWidget::keyup_event(event);
+    GUI::Widget::keyup_event(event);
 }
 
-void DoomWidget::paint_event(GPaintEvent& event)
+void DoomWidget::paint_event(GUI::PaintEvent& event)
 {
-    GPainter painter(*this);
+    GUI::Painter painter(*this);
     painter.add_clip_rect(event.rect());
 
     painter.draw_scaled_bitmap(rect(), *g_bitmap, g_bitmap->rect());
@@ -122,12 +121,12 @@ extern "C" void DG_Init()
 
     // window creation
 
-    g_bitmap = GraphicsBitmap::create_wrapper(GraphicsBitmap::Format::Indexed8, Size(DOOMGENERIC_RESX, DOOMGENERIC_RESY), DOOMGENERIC_RESX, DG_ScreenBuffer);
+    g_bitmap = Gfx::Bitmap::create_wrapper(Gfx::BitmapFormat::Indexed8, Gfx::Size(DOOMGENERIC_RESX, DOOMGENERIC_RESY), DOOMGENERIC_RESX, DG_ScreenBuffer);
 
-    g_window = GWindow::construct();
+    g_window = GUI::Window::construct();
     g_window->set_double_buffering_enabled(false);
     g_window->set_rect(100, 100, DOOMGENERIC_RESX * 2, DOOMGENERIC_RESY * 2);
-    g_window->set_icon(load_png("/res/icons/16x16/doom.png"));
+    g_window->set_icon(Gfx::Bitmap::load_from_file("/res/icons/16x16/doom.png"));
 
     g_doom_widget = DoomWidget::construct();
     g_window->set_main_widget(g_doom_widget);
@@ -142,7 +141,7 @@ extern "C" void DG_DrawFrame()
 
 extern "C" void DG_PumpEventLoop()
 {
-    CEventLoop::current().pump(CEventLoop::WaitMode::PollForEvents);
+    Core::EventLoop::current().pump(Core::EventLoop::WaitMode::PollForEvents);
 }
 
 extern "C" void DG_SleepMs(uint32_t ms)
