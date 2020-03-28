@@ -83,10 +83,7 @@ static void addKeyToQueue(const GUI::KeyEvent& event)
 class DoomWidget final : public GUI::Widget {
     C_OBJECT(DoomWidget)
 public:
-    DoomWidget(GUI::Widget* parent = nullptr)
-        : GUI::Widget(parent)
-    {
-    }
+    DoomWidget() {}
 
     virtual void keydown_event(GUI::KeyEvent&) override;
     virtual void keyup_event(GUI::KeyEvent&) override;
