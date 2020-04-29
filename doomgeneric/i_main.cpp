@@ -49,22 +49,20 @@ int main(int argc, char** argv)
 {
     GUI::Application app(argc, argv);
 
-    auto menubar = make<GUI::MenuBar>();
+    auto menubar = GUI::MenuBar::construct();
 
-    auto doom_menu = GUI::Menu::construct("DOOM");
-    doom_menu->add_action(GUI::CommonActions::make_quit_action([](auto&) {
+    auto& doom_menu = menubar->add_menu("DOOM");
+    doom_menu.add_action(GUI::CommonActions::make_quit_action([](auto&) {
         exit(0);
     }));
-    menubar->add_menu(move(doom_menu));
 
-    auto view_menu = GUI::Menu::construct("View");
+    auto& view_menu = menubar->add_menu("View");
     auto fullscreen_action = GUI::CommonActions::make_fullscreen_action([&](auto& action) {
         action.set_checked(!action.is_checked());
         DG_SetFullscreen(action.is_checked());
     });
     fullscreen_action->set_checkable(true);
-    view_menu->add_action(fullscreen_action);
-    menubar->add_menu(move(view_menu));
+    view_menu.add_action(fullscreen_action);
 
     app.set_menubar(move(menubar));
 
