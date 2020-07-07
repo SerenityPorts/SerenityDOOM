@@ -47,7 +47,7 @@ void DG_SetFullscreen(bool);
 
 int main(int argc, char** argv)
 {
-    GUI::Application app(argc, argv);
+    auto app = GUI::Application::construct(argc, argv);
 
     auto menubar = GUI::MenuBar::construct();
 
@@ -64,7 +64,7 @@ int main(int argc, char** argv)
     fullscreen_action->set_checkable(true);
     view_menu.add_action(fullscreen_action);
 
-    app.set_menubar(move(menubar));
+    app->set_menubar(move(menubar));
 
     // save arguments
 
