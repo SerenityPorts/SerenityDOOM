@@ -8,7 +8,7 @@
 CC=i686-pc-serenity-gcc
 CXX=i686-pc-serenity-g++
 CFLAGS+=-ggdb3 -Os
-CXXFLAGS=$(CFLAGS) -std=c++2a -fno-rtti -fno-exceptions
+CXXFLAGS=$(CFLAGS) -std=c++2a -fno-exceptions
 LDFLAGS+=-Wl,--gc-sections
 CFLAGS+=-ggdb3 -Wall -DNORMALUNIX -DLINUX -DSNDSERV # -DUSEASM
 LIBS+=-lm -lc -lgui -lipc -lgfx -lcore -lregex
