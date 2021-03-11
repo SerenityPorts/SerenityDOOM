@@ -118,7 +118,7 @@ extern "C" void DG_Init()
 
     // window creation
 
-    g_bitmap = Gfx::Bitmap::create_wrapper(Gfx::BitmapFormat::Indexed8, Gfx::IntSize(DOOMGENERIC_RESX, DOOMGENERIC_RESY), DOOMGENERIC_RESX, DG_ScreenBuffer);
+    g_bitmap = Gfx::Bitmap::create_wrapper(Gfx::BitmapFormat::Indexed8, Gfx::IntSize(DOOMGENERIC_RESX, DOOMGENERIC_RESY), 1, DOOMGENERIC_RESX, DG_ScreenBuffer);
 
     g_window = GUI::Window::construct();
     g_window->set_double_buffering_enabled(false);
