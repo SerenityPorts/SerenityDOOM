@@ -14,6 +14,8 @@
 #include <LibGUI/Painter.h>
 #include <LibCore/EventLoop.h>
 #include <LibCore/Timer.h>
+#include <LibGUI/Menu.h>
+#include <LibGUI/MenuBar.h>
 
 static RefPtr<GUI::Window> g_window;
 static RefPtr<Gfx::Bitmap> g_bitmap;
@@ -23,6 +25,8 @@ static RefPtr<Gfx::Bitmap> g_bitmap;
 static unsigned short s_KeyQueue[KEYQUEUE_SIZE];
 static unsigned int s_KeyQueueWriteIndex = 0;
 static unsigned int s_KeyQueueReadIndex = 0;
+
+extern "C" void DG_SetFullscreen(bool fullscreen);
 
 static unsigned char convertToDoomKey(const GUI::KeyEvent& event)
 {
@@ -124,6 +128,23 @@ extern "C" void DG_Init()
     g_window->set_double_buffering_enabled(false);
     g_window->set_rect(100, 100, DOOMGENERIC_RESX * 2, DOOMGENERIC_RESY * 2);
     g_window->set_icon(Gfx::Bitmap::load_from_file("/res/icons/16x16/doom.png"));
+
+    auto menubar = GUI::MenuBar::construct();
+
+    auto& doom_menu = menubar->add_menu("DOOM");
+    doom_menu.add_action(GUI::CommonActions::make_quit_action([](auto&) {
+        exit(0);
+    }));
+
+    auto& view_menu = menubar->add_menu("View");
+    auto fullscreen_action = GUI::CommonActions::make_fullscreen_action([&](auto& action) {
+        action.set_checked(!action.is_checked());
+        DG_SetFullscreen(action.is_checked());
+    });
+    fullscreen_action->set_checkable(true);
+    view_menu.add_action(fullscreen_action);
+
+    g_window->set_menubar(move(menubar));
 
     g_doom_widget = DoomWidget::construct();
     g_window->set_main_widget(g_doom_widget);
