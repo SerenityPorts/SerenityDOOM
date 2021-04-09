@@ -20,8 +20,6 @@
 
 #include <LibGUI/Action.h>
 #include <LibGUI/Application.h>
-#include <LibGUI/Menu.h>
-#include <LibGUI/MenuBar.h>
 
 #include <stdio.h>
 
@@ -48,23 +46,6 @@ void DG_SetFullscreen(bool);
 int main(int argc, char** argv)
 {
     auto app = GUI::Application::construct(argc, argv);
-
-    auto menubar = GUI::MenuBar::construct();
-
-    auto& doom_menu = menubar->add_menu("DOOM");
-    doom_menu.add_action(GUI::CommonActions::make_quit_action([](auto&) {
-        exit(0);
-    }));
-
-    auto& view_menu = menubar->add_menu("View");
-    auto fullscreen_action = GUI::CommonActions::make_fullscreen_action([&](auto& action) {
-        action.set_checked(!action.is_checked());
-        DG_SetFullscreen(action.is_checked());
-    });
-    fullscreen_action->set_checkable(true);
-    view_menu.add_action(fullscreen_action);
-
-    app->set_menubar(move(menubar));
 
     // save arguments
 
