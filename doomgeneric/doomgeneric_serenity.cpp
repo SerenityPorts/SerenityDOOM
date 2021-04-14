@@ -15,7 +15,7 @@
 #include <LibCore/EventLoop.h>
 #include <LibCore/Timer.h>
 #include <LibGUI/Menu.h>
-#include <LibGUI/MenuBar.h>
+#include <LibGUI/Menubar.h>
 
 static RefPtr<GUI::Window> g_window;
 static RefPtr<Gfx::Bitmap> g_bitmap;
@@ -129,7 +129,7 @@ extern "C" void DG_Init()
     g_window->set_rect(100, 100, DOOMGENERIC_RESX * 2, DOOMGENERIC_RESY * 2);
     g_window->set_icon(Gfx::Bitmap::load_from_file("/res/icons/16x16/doom.png"));
 
-    auto menubar = GUI::MenuBar::construct();
+    auto menubar = GUI::Menubar::construct();
 
     auto& doom_menu = menubar->add_menu("DOOM");
     doom_menu.add_action(GUI::CommonActions::make_quit_action([](auto&) {
