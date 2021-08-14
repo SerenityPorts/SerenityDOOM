@@ -122,29 +122,28 @@ extern "C" void DG_Init()
 
     // window creation
 
-    g_bitmap = Gfx::Bitmap::create_wrapper(Gfx::BitmapFormat::Indexed8, Gfx::IntSize(DOOMGENERIC_RESX, DOOMGENERIC_RESY), 1, DOOMGENERIC_RESX, DG_ScreenBuffer);
+    g_bitmap = Gfx::Bitmap::try_create_wrapper(Gfx::BitmapFormat::Indexed8, Gfx::IntSize(DOOMGENERIC_RESX, DOOMGENERIC_RESY), 1, DOOMGENERIC_RESX, DG_ScreenBuffer);
+    VERIFY(g_bitmap);
 
     g_window = GUI::Window::construct();
     g_window->set_double_buffering_enabled(false);
     g_window->set_rect(100, 100, DOOMGENERIC_RESX * 2, DOOMGENERIC_RESY * 2);
-    g_window->set_icon(Gfx::Bitmap::load_from_file("/res/icons/16x16/doom.png"));
+    auto app_icon = Gfx::Bitmap::try_load_from_file("/res/icons/16x16/doom.png");
+    VERIFY(app_icon);
+    g_window->set_icon(app_icon);
 
-    auto menubar = GUI::Menubar::construct();
-
-    auto& doom_menu = menubar->add_menu("DOOM");
+    auto& doom_menu = g_window->add_menu("DOOM");
     doom_menu.add_action(GUI::CommonActions::make_quit_action([](auto&) {
         exit(0);
     }));
 
-    auto& view_menu = menubar->add_menu("View");
+    auto& view_menu = g_window->add_menu("View");
     auto fullscreen_action = GUI::CommonActions::make_fullscreen_action([&](auto& action) {
         action.set_checked(!action.is_checked());
         DG_SetFullscreen(action.is_checked());
     });
     fullscreen_action->set_checkable(true);
     view_menu.add_action(fullscreen_action);
-
-    g_window->set_menubar(move(menubar));
 
     g_doom_widget = DoomWidget::construct();
     g_window->set_main_widget(g_doom_widget);
