@@ -5,8 +5,8 @@
 # $Log:$
 #
 
-CC=i686-pc-serenity-gcc
-CXX=i686-pc-serenity-g++
+CC?=i686-pc-serenity-gcc
+CXX?=i686-pc-serenity-g++
 CFLAGS+=-ggdb3 -Os
 CXXFLAGS=$(CFLAGS) -std=c++2a -fno-exceptions
 LDFLAGS+=-Wl,--gc-sections
