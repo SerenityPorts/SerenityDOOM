@@ -122,12 +122,12 @@ extern "C" void DG_Init()
 
     // window creation
 
-    g_bitmap = Gfx::Bitmap::try_create_wrapper(Gfx::BitmapFormat::Indexed8, Gfx::IntSize(DOOMGENERIC_RESX, DOOMGENERIC_RESY), 1, DOOMGENERIC_RESX, DG_ScreenBuffer).release_value_but_fixme_should_propagate_errors();
+    g_bitmap = Gfx::Bitmap::create_wrapper(Gfx::BitmapFormat::Indexed8, Gfx::IntSize(DOOMGENERIC_RESX, DOOMGENERIC_RESY), 1, DOOMGENERIC_RESX, DG_ScreenBuffer).release_value_but_fixme_should_propagate_errors();
 
     g_window = GUI::Window::construct();
     g_window->set_double_buffering_enabled(false);
     g_window->set_rect(100, 100, DOOMGENERIC_RESX * 2, DOOMGENERIC_RESY * 2);
-    auto app_icon = Gfx::Bitmap::try_load_from_file("/res/icons/16x16/doom.png"sv).release_value_but_fixme_should_propagate_errors();
+    auto app_icon = Gfx::Bitmap::load_from_file("/res/icons/16x16/doom.png"sv).release_value_but_fixme_should_propagate_errors();
     g_window->set_icon(app_icon);
 
     auto& doom_menu = g_window->add_menu("DOOM");
