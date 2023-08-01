@@ -18,9 +18,12 @@
 
 //#include "config.h"
 
+#include <AK/StringView.h>
 #include <LibGUI/Action.h>
 #include <LibGUI/Application.h>
+#include <LibMain/Main.h>
 
+#include <string.h>
 #include <stdio.h>
 
 extern "C" {
@@ -45,7 +48,12 @@ void DG_SetFullscreen(bool);
 
 int main(int argc, char** argv)
 {
-    auto app = GUI::Application::construct(argc, argv);
+    Vector<StringView> arguments;
+    arguments.ensure_capacity(argc);
+    for (int i = 0; i < argc; ++i)
+        arguments.unchecked_append({ argv[i], strlen(argv[i]) });
+
+    auto app = GUI::Application::create(Main::Arguments { argc, argv, arguments.span() });
 
     // save arguments
 
