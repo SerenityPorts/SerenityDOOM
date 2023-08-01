@@ -130,12 +130,12 @@ extern "C" void DG_Init()
     auto app_icon = Gfx::Bitmap::load_from_file("/res/icons/16x16/doom.png"sv).release_value_but_fixme_should_propagate_errors();
     g_window->set_icon(app_icon);
 
-    auto& doom_menu = g_window->add_menu("DOOM");
+    auto& doom_menu = g_window->add_menu("DOOM"_short_string);
     doom_menu.add_action(GUI::CommonActions::make_quit_action([](auto&) {
         exit(0);
     }));
 
-    auto& view_menu = g_window->add_menu("View");
+    auto& view_menu = g_window->add_menu("View"_short_string);
     auto fullscreen_action = GUI::CommonActions::make_fullscreen_action([&](auto& action) {
         action.set_checked(!action.is_checked());
         DG_SetFullscreen(action.is_checked());
